@@ -9,8 +9,7 @@ import math
 ddir = '/Volumes/data02/HYCOMdata/GLBa0.08_expt90_surf/hycom_GLBu0.08_912_'
 
 
-def set_hycom_fieldset(t=None):
-    t0 = datetime.date(2015, 6, 13)
+def set_hycom_fieldset(t0, t=None):
     if t is None:
         files = [ddir + (t0 - delta(days=i)).strftime('%Y%m%d') + "00_t000.nc" for i in range(3, -1, -1)]
     else:
@@ -48,8 +47,8 @@ def DeleteParticle(particle, fieldset, time, dt):
     particle.delete()
 
 
-def run_microbes_eac(outfile):
-    fieldset = set_hycom_fieldset()
+def run_microbes_eac(outfile, startdate):
+    fieldset = set_hycom_fieldset(t0=startdate)
     fieldset.add_constant('maxage', 90.*86400)
     fieldset.Kh = 100.  # diffusion constant
 
@@ -85,8 +84,12 @@ def run_microbes_eac(outfile):
                             dt=delta(minutes=-5),
                             recovery={ErrorCode.ErrorOutOfBounds: DeleteParticle})
             pfile[p].write(pset[p], pset[p][0].time)
-        fieldset.advancetime(set_hycom_fieldset(s))
+        fieldset.advancetime(set_hycom_fieldset(t0=startdate, t=s))
 
 
-outfile = "microbes_eac_hycom_particles"
-run_microbes_eac(outfile)
+t0 = datetime.date(2015, 6, 13)  # True sampling start date
+for t in np.arange(-4, 4, 1)*7:
+    startdate = delta(days=t) + t0
+    outfile = "microbes_eac_hycom_particles_starts"+startdate.strftime('%Y%m%d')+"_"
+    print outfile
+    run_microbes_eac(outfile, startdate=startdate)
