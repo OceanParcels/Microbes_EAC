@@ -88,7 +88,7 @@ def run_microbes_eac(outfile, startdate):
 
 
 t0 = datetime.date(2015, 6, 13)  # True sampling start date
-for t in np.arange(-4, 4, 1)*7:
+for t in np.arange(-4, 5, 1)*7:
     startdate = delta(days=t) + t0
     outfile = "microbes_eac_hycom_particles_starts"+startdate.strftime('%Y%m%d')+"_"
     print outfile
