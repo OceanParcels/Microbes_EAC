@@ -56,10 +56,10 @@ def run_microbes_eac(outfile):
     i0 = len(fieldset.U.time)
 
     nperloc = 100
-    sitelat38 = np.tile([-32.788], nperloc)
-    sitelon38 = np.tile([153.785], nperloc)
-    sitelat40 = np.tile([-30.621], nperloc)
-    sitelon40 = np.tile([153.371], nperloc)
+    sitelat38 = np.tile([-32.788], [nperloc])
+    sitelon38 = np.tile([153.785], [nperloc])
+    sitelat40 = np.tile([-30.621], [nperloc])
+    sitelon40 = np.tile([153.371], [nperloc])
 
     class MicrobeParticle(JITParticle):
         temp = Variable('temp', dtype=np.float32, initial=fieldset.temp)
